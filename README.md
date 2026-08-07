@@ -1,66 +1,29 @@
-# OpenShift console plugin template
+# OADP UI
 
-This project is a minimal template for writing a new OpenShift Console dynamic
-plugin.
+An [OpenShift Console dynamic plugin](https://github.com/openshift/console/tree/main/frontend/packages/console-dynamic-plugin-sdk)
+that provides a web UI for [OADP (OpenShift API for Data Protection)](https://github.com/openshift/oadp-operator),
+enabling single-cluster backup and restore management with [Velero](https://velero.io) directly from the
+OpenShift web console.
 
-[Openshift console plugins](https://github.com/openshift/console/tree/main/frontend/packages/console-dynamic-plugin-sdk)
-allow you to extend the [OpenShift web console](https://github.com/openshift/console)
-at runtime, adding custom pages and other extensions. They are based on
-[webpack module federation](https://webpack.js.org/concepts/module-federation/).
-Plugins are registered with console using the `ConsolePlugin` custom resource
-and enabled in the console operator config by a cluster administrator.
+The plugin is registered with the console using the `ConsolePlugin` custom
+resource and enabled in the console operator config by a cluster administrator.
 
-The `main` branch of this repository contains an example plugin which works
-with the latest version. To see an example of a plugin which works with an older
-version, visit the appropriate `release-4.x` branch.
+## Scope
 
-[Node.js](https://nodejs.org/en/) and [yarn](https://yarnpkg.com) are required
-to build and run the example. To run OpenShift console in a container, either
-[Docker](https://www.docker.com) or [podman 3.2.0+](https://podman.io) and
-[oc](https://console.redhat.com/openshift/downloads) are required.
+This project targets **single-cluster OADP management only**. Multi-cluster
+management features are out of scope.
 
-## Getting started
+The repository is kept in parity with relevant upstream work (such as the
+OADP operator, Velero-related UIs, and the OpenShift console plugin template)
+via an automated daily workflow in
+[.github/workflows/daily-upstream-parity.md](.github/workflows/daily-upstream-parity.md).
 
-> [!IMPORTANT]
-> To use this template, **DO NOT FORK THIS REPOSITORY**! Click **Use this template**, then select
-> [**Create a new repository**](https://github.com/new?template_name=console-plugin-template&template_owner=openshift)
-> to create a new repository.
->
-> ![A screenshot showing where the "Use this template" button is located](https://i.imgur.com/AhaySbU.png)
->
-> **Forking this repository** for purposes outside of contributing to this repository
-> **will cause issues**, as users cannot have more than one fork of a template repository
-> at a time. This could prevent future users from forking and contributing to your plugin.
->
-> Your fork would also behave like a template repository, which might be confusing for
-> contributiors, because it is not possible for repositories generated from a template
-> repository to contribute back to the template.
+## Requirements
 
-After cloning your instantiated repository, you must update the plugin metadata, such as the
-plugin name in the `consolePlugin` declaration of [package.json](package.json).
-
-```json
-"consolePlugin": {
-  "name": "console-plugin-template",
-  "version": "0.0.1",
-  "displayName": "My Plugin",
-  "description": "Enjoy this shiny, new console plugin!",
-  "exposedModules": {
-    "ExamplePage": "./components/ExamplePage"
-  },
-  "dependencies": {
-    "@console/pluginAPI": "*"
-  }
-}
-```
-
-The template adds a single example page in the Home navigation section. The
-extension is declared in the [console-extensions.json](console-extensions.json)
-file and the React component is declared in
-[src/components/ExamplePage.tsx](src/components/ExamplePage.tsx).
-
-You can run the plugin using a local development environment or build an image
-to deploy it to a cluster.
+- [Node.js](https://nodejs.org/en/) and [yarn](https://yarnpkg.com) to build and run the plugin
+- [Docker](https://www.docker.com) or [podman 3.2.0+](https://podman.io) and
+  [oc](https://console.redhat.com/openshift/downloads) to run the OpenShift console in a container
+- An OpenShift cluster (4.12+) with the [OADP operator](https://github.com/openshift/oadp-operator) installed for full functionality
 
 ## Development
 
@@ -116,27 +79,33 @@ OC_PASS=<password>
 3. `yarn run start`
 4. Navigate to <http://localhost:9000/example>
 
+## Testing
+
+- `yarn test` runs Jest unit tests
+- `yarn test-e2e` runs Playwright e2e tests in headed mode
+- `yarn test-e2e-headless` runs Playwright e2e tests in headless mode
+
 ## Docker image
 
-Before you can deploy your plugin on a cluster, you must build an image and
+Before you can deploy the plugin on a cluster, you must build an image and
 push it to an image registry.
 
 1. Build the image:
 
    ```sh
-   docker build -t quay.io/my-repository/my-plugin:latest .
+   docker build -t quay.io/my-repository/oadp-ui:latest .
    ```
 
 2. Run the image:
 
    ```sh
-   docker run -it --rm -d -p 9001:80 quay.io/my-repository/my-plugin:latest
+   docker run -it --rm -d -p 9001:80 quay.io/my-repository/oadp-ui:latest
    ```
 
 3. Push the image:
 
    ```sh
-   docker push quay.io/my-repository/my-plugin:latest
+   docker push quay.io/my-repository/oadp-ui:latest
    ```
 
 NOTE: If you have a Mac with Apple silicon, you will need to add the flag
@@ -155,23 +124,22 @@ Additional parameters can be specified if desired. Consult the chart [values](ch
 
 ### Installing the Helm Chart
 
-Install the chart using the name of the plugin as the Helm release name into a new namespace or an existing namespace as specified by the `plugin_console-plugin-template` parameter and providing the location of the image within the `plugin.image` parameter by using the following command:
+Install the chart into a new namespace or an existing namespace and provide the
+location of the image within the `plugin.image` parameter by using the
+following command:
 
 ```shell
-helm upgrade -i  my-plugin charts/openshift-console-plugin -n my-namespace --create-namespace --set plugin.image=my-plugin-image-location
+helm upgrade -i oadp-ui charts/openshift-console-plugin -n oadp-ui --create-namespace --set plugin.image=my-plugin-image-location
 ```
-
-NOTE: When deploying on OpenShift 4.10, it is recommended to add the parameter `--set plugin.securityContext.enabled=false` which will omit configurations related to Pod Security.
 
 NOTE: When defining i18n namespace, adhere `plugin__<name-of-the-plugin>` format. The name of the plugin should be extracted from the `consolePlugin` declaration within the [package.json](package.json) file.
 
 ## i18n
 
-The plugin template demonstrates how you can translate messages in with [react-i18next](https://react.i18next.com/). The i18n namespace must match
-the name of the `ConsolePlugin` resource with the `plugin__` prefix to avoid
-naming conflicts. For example, the plugin template uses the
-`plugin__console-plugin-template` namespace. You can use the `useTranslation` hook
-with this namespace as follows:
+The plugin uses [react-i18next](https://react.i18next.com/) for translations.
+The i18n namespace must match the name of the `ConsolePlugin` resource with the
+`plugin__` prefix to avoid naming conflicts. You can use the `useTranslation`
+hook with this namespace as follows:
 
 ```tsx
 const Header: React.FC = () => {
@@ -181,23 +149,11 @@ const Header: React.FC = () => {
 ```
 
 For labels in `console-extensions.json`, you can use the format
-`%plugin__console-plugin-template~My Label%`. Console will replace the value with
-the message for the current language from the `plugin__console-plugin-template`
-namespace. For example:
+`%plugin__console-plugin-template~My Label%`. Console will replace the value
+with the message for the current language from the corresponding namespace.
 
-```json
-  {
-    "type": "console.navigation/section",
-    "properties": {
-      "id": "admin-demo-section",
-      "perspective": "admin",
-      "name": "%plugin__console-plugin-template~Plugin Template%"
-    }
-  }
-```
-
-Running `yarn i18n` updates the JSON files in the `locales` folder of the
-plugin template when adding or changing messages.
+Running `yarn i18n` updates the JSON files in the `locales` folder when adding
+or changing messages.
 
 ## Linting
 
@@ -217,6 +173,8 @@ break console styles!
 
 ## References
 
+- [OADP Operator](https://github.com/openshift/oadp-operator)
+- [Velero](https://velero.io)
 - [Console Plugin SDK README](https://github.com/openshift/console/tree/main/frontend/packages/console-dynamic-plugin-sdk)
-- [Customization Plugin Example](https://github.com/spadgett/console-customization-plugin)
+- [Console Plugin Template](https://github.com/openshift/console-plugin-template)
 - [Dynamic Plugin Enhancement Proposal](https://github.com/openshift/enhancements/blob/master/enhancements/console/dynamic-plugins.md)
