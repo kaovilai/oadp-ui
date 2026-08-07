@@ -153,7 +153,7 @@ When instantiating from template, update:
 
 ### Building Image
 ```bash
-docker build -t quay.io/my-repository/my-plugin:latest .
+docker build -t ghcr.io/kaovilai/oadp-ui:latest .
 # For Apple Silicon: add --platform=linux/amd64
 ```
 

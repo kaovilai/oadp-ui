@@ -103,25 +103,28 @@ OC_PASS=<password>
 
 ## Docker image
 
-Before you can deploy the plugin on a cluster, you must build an image and
-push it to an image registry.
+Images are automatically built and pushed to `ghcr.io/kaovilai/oadp-ui` by the
+[build-and-push-image](.github/workflows/build-and-push-image.yml) workflow on
+pushes to `main` and version tags.
+
+To build and push manually:
 
 1. Build the image:
 
    ```sh
-   docker build -t quay.io/my-repository/oadp-ui:latest .
+   docker build -t ghcr.io/kaovilai/oadp-ui:latest .
    ```
 
 2. Run the image:
 
    ```sh
-   docker run -it --rm -d -p 9001:80 quay.io/my-repository/oadp-ui:latest
+   docker run -it --rm -d -p 9001:80 ghcr.io/kaovilai/oadp-ui:latest
    ```
 
 3. Push the image:
 
    ```sh
-   docker push quay.io/my-repository/oadp-ui:latest
+   docker push ghcr.io/kaovilai/oadp-ui:latest
    ```
 
 NOTE: If you have a Mac with Apple silicon, you will need to add the flag
@@ -145,7 +148,7 @@ location of the image within the `plugin.image` parameter by using the
 following command:
 
 ```shell
-helm upgrade -i oadp-ui charts/openshift-console-plugin -n oadp-ui --create-namespace --set plugin.image=my-plugin-image-location
+helm upgrade -i oadp-ui charts/openshift-console-plugin -n oadp-ui --create-namespace --set plugin.image=ghcr.io/kaovilai/oadp-ui:latest
 ```
 
 NOTE: When defining i18n namespace, adhere `plugin__<name-of-the-plugin>` format. The name of the plugin should be extracted from the `consolePlugin` declaration within the [package.json](package.json) file.
