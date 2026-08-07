@@ -39,4 +39,11 @@ describe('daily upstream parity workflow', () => {
     expect(workflow).toContain('velero-ui PR 56');
     expect(workflow).toContain('vui-ui PR 78');
   });
+
+  it('keeps the README features catalog agentically updated', () => {
+    expect(workflow).toContain('Keep the `Features` section of `README.md` up to date');
+    const readme = fs.readFileSync(path.join(ROOT, 'README.md'), 'utf-8');
+    expect(readme).toContain('## Features');
+    expect(readme).toContain('| Feature | Status | Description |');
+  });
 });

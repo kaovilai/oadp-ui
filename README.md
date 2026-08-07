@@ -19,6 +19,21 @@ via an automated daily workflow defined in
 [.github/workflows/daily-upstream-parity.md](.github/workflows/daily-upstream-parity.md)
 (a [gh-aw](https://github.com/githubnext/gh-aw) agentic workflow definition).
 
+## Features
+
+The table below catalogs the features currently implemented by this plugin.
+It is kept up to date agentically: the daily upstream parity workflow updates
+this catalog whenever it adds or changes a feature.
+
+| Feature | Status | Description |
+| --- | --- | --- |
+| Example page | Implemented | Example console page at `/example` demonstrating PatternFly components and i18n ([src/components/ExamplePage.tsx](src/components/ExamplePage.tsx)) |
+| Admin navigation item | Implemented | Navigation item in the admin perspective **Home** section linking to the example page ([console-extensions.json](console-extensions.json)) |
+| Daily upstream parity automation | Implemented | Scheduled agentic workflow that mirrors relevant single-cluster OADP UI work from approved upstreams ([.github/workflows/daily-upstream-parity.md](.github/workflows/daily-upstream-parity.md)) |
+| Backup management | Planned | View and manage Velero backups from the console |
+| Restore management | Planned | View and manage Velero restores from the console |
+| Backup/restore progress visibility | Planned | Progress visibility for Velero/Kopia backup and restore flows |
+
 ## Requirements
 
 - [Node.js](https://nodejs.org/en/) and [yarn](https://yarnpkg.com) to build and run the plugin

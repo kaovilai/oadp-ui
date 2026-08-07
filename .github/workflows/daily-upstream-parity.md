@@ -86,6 +86,7 @@ On each run, do the following in order:
 - Do not add multi-cluster dashboards, APIs, navigation, labels, or wording.
 - Keep parity work aligned with `openshift/oadp-operator` capabilities and the Velero-related repositories it integrates with.
 - When rebasing template updates from `openshift/console-plugin-template`, keep only the minimal relevant changes needed here.
+- Keep the `Features` section of `README.md` up to date: whenever you add, change, or remove a user-facing feature, update the features table in `README.md` in the same pull request so it accurately catalogs implemented and planned features. Do not rewrite unrelated parts of the README.
 
 ## Validation rules
 
