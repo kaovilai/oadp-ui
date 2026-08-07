@@ -15,8 +15,9 @@ management features are out of scope.
 
 The repository is kept in parity with relevant upstream work (such as the
 OADP operator, Velero-related UIs, and the OpenShift console plugin template)
-via an automated daily workflow in
-[.github/workflows/daily-upstream-parity.md](.github/workflows/daily-upstream-parity.md).
+via an automated daily workflow defined in
+[.github/workflows/daily-upstream-parity.md](.github/workflows/daily-upstream-parity.md)
+(a [gh-aw](https://github.com/githubnext/gh-aw) agentic workflow definition).
 
 ## Requirements
 
