@@ -23,6 +23,7 @@ describe('daily upstream parity workflow', () => {
     expect(workflow).toContain('otwld/velero-ui');
     expect(workflow).toContain('seriohub/vui-ui');
     expect(workflow).toContain('openshift/oadp-operator');
+    expect(workflow).toContain('migtools/oadp-non-admin');
     expect(workflow).toContain('oadp-rebasebot/oadp-rebase');
     expect(workflow).toContain('openshift/console-plugin-template');
     expect(workflow).toContain('single-cluster OADP management only');

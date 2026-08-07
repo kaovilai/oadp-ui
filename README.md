@@ -30,9 +30,14 @@ this catalog whenever it adds or changes a feature.
 | Example page | Implemented | Example console page at `/example` demonstrating PatternFly components and i18n ([src/components/ExamplePage.tsx](src/components/ExamplePage.tsx)) |
 | Admin navigation item | Implemented | Navigation item in the admin perspective **Home** section linking to the example page ([console-extensions.json](console-extensions.json)) |
 | Daily upstream parity automation | Implemented | Scheduled agentic workflow that mirrors relevant single-cluster OADP UI work from approved upstreams ([.github/workflows/daily-upstream-parity.md](.github/workflows/daily-upstream-parity.md)) |
+| Multiarch image publishing | Implemented | CI builds a multiarch (amd64/arm64) plugin image distributed across native runners and pushes it to `ghcr.io/kaovilai/oadp-ui` ([.github/workflows/build-and-push-image.yml](.github/workflows/build-and-push-image.yml)) |
 | Backup management | Planned | View and manage Velero backups from the console |
 | Restore management | Planned | View and manage Velero restores from the console |
 | Backup/restore progress visibility | Planned | Progress visibility for Velero/Kopia backup and restore flows |
+| Non-admin backup (NonAdminBackup) | Planned | Namespace-scoped backup creation and monitoring for non-admin users, including Velero phase, data mover upload progress, and queue position ([migtools/oadp-non-admin](https://github.com/migtools/oadp-non-admin)) |
+| Non-admin restore (NonAdminRestore) | Planned | Namespace-scoped restore of a completed NonAdminBackup, with data mover download progress and queue position |
+| Non-admin backup storage location (NonAdminBSL) | Planned | Non-admin creation of backup storage locations with cluster-admin approval workflow status (`ClusterAdminApproved` condition) |
+| Non-admin log/artifact download (NonAdminDownloadRequest) | Planned | Download backup/restore logs and artifacts for non-admin users via pre-signed URLs |
 
 ## Requirements
 
@@ -103,7 +108,8 @@ OC_PASS=<password>
 
 ## Docker image
 
-Images are automatically built and pushed to `ghcr.io/kaovilai/oadp-ui` by the
+Multiarch images (`linux/amd64`, `linux/arm64`) are automatically built on
+native runners and pushed to `ghcr.io/kaovilai/oadp-ui` by the
 [build-and-push-image](.github/workflows/build-and-push-image.yml) workflow on
 pushes to `main` and version tags.
 

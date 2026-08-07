@@ -60,8 +60,9 @@ Prioritize these public upstreams in this order:
 3. `otwld/velero-ui`
 4. `seriohub/vui-ui`
 5. `openshift/oadp-operator`
-6. The integration graph documented in `oadp-rebasebot/oadp-rebase` `repos.yaml`, but only when it directly affects this plugin's single-cluster OADP UI behavior
-7. `openshift/console-plugin-template` updates that should be rebased into this repository without broad churn
+6. `migtools/oadp-non-admin` for namespace-scoped (non-admin) backup and restore capabilities, such as `NonAdminBackup`, `NonAdminRestore`, and related CRs, that should be surfaced in this plugin's single-cluster UI
+7. The integration graph documented in `oadp-rebasebot/oadp-rebase` `repos.yaml`, but only when it directly affects this plugin's single-cluster OADP UI behavior
+8. `openshift/console-plugin-template` updates that should be rebased into this repository without broad churn
 
 ## Run goals
 
