@@ -43,7 +43,7 @@ jobs:
           GIT_STATUS="$(git status --short --untracked-files -- locales)"
           if [ -n "$GIT_STATUS" ]; then
             echo "i18n files are not up to date. Run 'yarn i18n' then commit changes."
-            git --no-pager diff
+            git --no-pager diff -- locales
             exit 1
           fi
 
@@ -59,7 +59,10 @@ jobs:
   dependabot-auto-merge:
     name: Auto-merge Dependabot PR
     needs: test
-    if: github.event_name == 'pull_request' && github.actor == 'dependabot[bot]'
+    if: >
+      github.event_name == 'pull_request' &&
+      github.actor == 'dependabot[bot]' &&
+      github.event.pull_request.user.login == 'dependabot[bot]'
     runs-on: ubuntu-latest
     permissions:
       contents: write
