@@ -1,0 +1,72 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+env:
+  PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: 1
+
+jobs:
+  test:
+    name: Lint, test, and build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Enable corepack
+        run: corepack enable
+
+      - name: Install dependencies
+        run: yarn install --immutable
+
+      - name: Lint
+        run: yarn lint
+
+      - name: Check i18n files are up to date
+        run: |
+          yarn i18n
+          GIT_STATUS="$(git status --short --untracked-files -- locales)"
+          if [ -n "$GIT_STATUS" ]; then
+            echo "i18n files are not up to date. Run 'yarn i18n' then commit changes."
+            git --no-pager diff
+            exit 1
+          fi
+
+      - name: Check yarn.lock is deduplicated
+        run: yarn dedupe --strategy highest --check
+
+      - name: Test
+        run: yarn test --ci --maxWorkers=2
+
+      - name: Build
+        run: yarn build
+
+  dependabot-auto-merge:
+    name: Auto-merge Dependabot PR
+    needs: test
+    if: github.event_name == 'pull_request' && github.actor == 'dependabot[bot]'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+    steps:
+      - name: Enable auto-merge for Dependabot PR
+        run: gh pr merge --auto --squash "$PR_URL"
+        env:
+          PR_URL: ${{ github.event.pull_request.html_url }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
