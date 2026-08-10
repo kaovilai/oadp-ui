@@ -91,6 +91,14 @@ On each run, do the following in order:
 - When rebasing template updates from `openshift/console-plugin-template`, keep only the minimal relevant changes needed here.
 - Keep the `Features` section of `README.md` up to date: whenever you add, change, or remove a user-facing feature, update the features table in `README.md` in the same pull request so it accurately catalogs implemented and planned features. Do not rewrite unrelated parts of the README.
 
+## License attribution rules
+
+- Comply with the license of every upstream source you mirror. Before adapting code, check the upstream repository's license (for example `LICENSE`, `LICENSE.md`, or `NOTICE` files).
+- When code is copied or closely adapted from an upstream source, retain any copyright, patent, trademark, and attribution notices from the copied portions, and add a source-code comment in the affected file identifying the upstream repository, the license (for example Apache-2.0 or MIT), and the upstream URL of the adapted code.
+- If an upstream project ships a `NOTICE` file with attribution notices that pertain to the adapted code, reproduce the relevant notices in the source-code comment.
+- Do not mirror code from an upstream whose license is missing, unclear, or incompatible with this repository's Apache-2.0 license; call `noop` with a short explanation instead.
+- Independently reimplementing behavior from scratch (without copying upstream code) does not require attribution, but noting the upstream inspiration in a source-code comment is still encouraged.
+
 ## Validation rules
 
 Before opening a pull request, run the smallest existing validation commands that cover your edits. Prefer targeted commands first, then expand only if needed. Use the repository's existing tools only.
