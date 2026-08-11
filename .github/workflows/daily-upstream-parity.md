@@ -37,6 +37,7 @@ safe-outputs:
       - "integration-tests/**"
       - "locales/**"
       - "charts/**"
+      - "__mocks__/**"
       - "console-extensions.json"
       - "package.json"
       - "rspack.config.ts"
