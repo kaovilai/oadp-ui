@@ -58,7 +58,6 @@
     "jest-environment-jsdom": "^30.4.1",
     "jest-junit": "^17.0.0",
     "prettier": "^3.9.6",
-    "prettier-stylelint": "^0.4.2",
     "react": "^18.3.1",
     "react-compiler-runtime": "^1.0.0",
     "react-dom": "^18.3.1",
@@ -75,6 +74,10 @@
     "@playwright/browser-chromium": {
       "built": true
     }
+  },
+  "resolutions": {
+    "immutable": "^4.3.9",
+    "brace-expansion@^2.0.2": "^2.1.4"
   },
   "consolePlugin": {
     "name": "console-plugin-template",
